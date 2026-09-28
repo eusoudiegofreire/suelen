@@ -71,7 +71,7 @@ export function FullFace() {
             <div className="mt-9">
               <WhatsappCta
                 variant="onDark"
-                message="Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de agendar uma avaliação Full Face."
+                message="Olá! Conheci o site da Dra. Suelen Paranho e gostaria de agendar uma avaliação Full Face."
               >
                 Agendar avaliação Full Face
               </WhatsappCta>
@@ -92,7 +92,7 @@ export function FullFace() {
             blurDataURL={fotos.suelenFullFace.blurDataURL}
             placeholder="blur"
             sizes="(min-width: 1024px) 42vw, (min-width: 640px) 60vw, 85vw"
-            alt="Dra. Suelen Paranhos em ambiente de estúdio, sentada, vestindo traje social."
+            alt="Dra. Suelen Paranho em ambiente de estúdio, sentada, vestindo traje social."
             className="relative h-auto w-full"
           />
         </Reveal>

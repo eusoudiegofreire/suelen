@@ -55,7 +55,7 @@ export function Procedimentos() {
       </ul>
 
       <Reveal delay={120} className="mt-12 flex justify-center">
-        <WhatsappCta message="Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de agendar uma avaliação para saber qual procedimento é indicado para mim.">
+        <WhatsappCta message="Olá! Conheci o site da Dra. Suelen Paranho e gostaria de agendar uma avaliação para saber qual procedimento é indicado para mim.">
           Quero saber qual procedimento é indicado para mim
         </WhatsappCta>
       </Reveal>

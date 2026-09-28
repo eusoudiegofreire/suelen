@@ -116,7 +116,7 @@ export function Hero() {
                 placeholder="blur"
                 preload
                 sizes="(min-width: 1024px) 700px, (min-width: 640px) 60vw, 92vw"
-                alt="Retrato da Dra. Suelen Paranhos, cirurgiã-dentista."
+                alt="Retrato da Dra. Suelen Paranho, cirurgiã-dentista."
                 className="aspect-[4/5] h-full w-full object-cover object-[50%_18%] lg:aspect-[7/8]"
               />
             </div>

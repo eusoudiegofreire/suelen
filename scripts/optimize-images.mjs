@@ -20,12 +20,12 @@ const OUT = path.join("public", "fotos");
  */
 const JOBS = [
   // Versao com o fundo do estudio reeditado pelo cliente para acompanhar o
-  // creme da pagina. O original sem edicao continua em suelen-paranhos-01.jpeg.
-  { key: "heroSuelen", file: "suelen-paranhos-01-editada.png", out: "suelen-hero-2.webp", width: 1400 },
-  { key: "suelenFullFace", file: "suelen-paranhos-02.jpeg", out: "suelen-full-face.webp", width: 1300 },
+  // creme da pagina. O original sem edicao continua em suelen-paranho-01.jpeg.
+  { key: "heroSuelen", file: "suelen-paranho-01-editada.png", out: "suelen-hero-2.webp", width: 1400 },
+  { key: "suelenFullFace", file: "suelen-paranho-02.jpeg", out: "suelen-full-face.webp", width: 1300 },
   {
     key: "suelenSobre",
-    file: "suelen-paranhos-02.jpeg",
+    file: "suelen-paranho-02.jpeg",
     out: "suelen-sobre.webp",
     width: 1200,
     crop: { left: 0.264, top: 0.13, width: 0.504, height: 0.42 },

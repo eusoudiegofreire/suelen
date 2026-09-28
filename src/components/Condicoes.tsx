@@ -36,7 +36,7 @@ export function Condicoes() {
           <div className="mt-9">
             <WhatsappCta
               variant="outline"
-              message="Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de consultar a disponibilidade e as condições."
+              message="Olá! Conheci o site da Dra. Suelen Paranho e gostaria de consultar a disponibilidade e as condições."
             >
               Consultar disponibilidade e condições
             </WhatsappCta>

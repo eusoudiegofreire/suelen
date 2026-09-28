@@ -5,10 +5,11 @@ import { siteConfig } from "@/config/site";
  * Assinatura da marca: simbolo oficial extraido de imagens/Logo.pdf mais o
  * nome escrito em HTML.
  *
- * PENDENCIA: a versao textual dentro do PDF gera "SUELEN PARANHO", sem o "s"
- * final. Enquanto a cliente nao confirmar a grafia, usamos apenas o simbolo
- * isolado e escrevemos o nome aqui, com a grafia correta. Nao usar
- * logo-horizontal-*.png no cabecalho ou no rodape ate isso ser resolvido.
+ * A grafia correta do sobrenome e "Paranho", sem "s" no final — confirmada
+ * pelo cliente e coerente com a logo. O nome fica em HTML (e nao na versao
+ * textual do PDF) para escalar bem e permanecer selecionavel e legivel por
+ * leitor de tela; as versoes logo-horizontal-*.png estao em public/marca/ e
+ * podem ser usadas quando um bloco de imagem unica for preferivel.
  */
 export function Marca({
   tone = "light",

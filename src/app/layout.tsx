@@ -20,9 +20,9 @@ const inter = Inter({
 });
 
 const TITULO =
-  "Full Face e Harmonização Orofacial em Ariquemes | Dra. Suelen Paranhos";
+  "Full Face e Harmonização Orofacial em Ariquemes | Dra. Suelen Paranho";
 const DESCRICAO =
-  "Avaliação facial individualizada, Full Face e procedimentos de harmonização orofacial com a Dra. Suelen Paranhos em Ariquemes–RO.";
+  "Avaliação facial individualizada, Full Face e procedimentos de harmonização orofacial com a Dra. Suelen Paranho em Ariquemes–RO.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "estética facial",
     "toxina botulínica",
     "preenchimento labial",
-    "Dra. Suelen Paranhos",
+    "Dra. Suelen Paranho",
   ],
   alternates: { canonical: "/" },
   openGraph: {

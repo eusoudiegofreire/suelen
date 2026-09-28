@@ -21,7 +21,7 @@ export function SobreDra() {
             blurDataURL={fotos.suelenSobre.blurDataURL}
             placeholder="blur"
             sizes="(min-width: 1024px) 34vw, (min-width: 640px) 55vw, 85vw"
-            alt="Dra. Suelen Paranhos, retrato em plano aproximado."
+            alt="Dra. Suelen Paranho, retrato em plano aproximado."
             className="relative h-auto w-full object-cover"
           />
         </Reveal>

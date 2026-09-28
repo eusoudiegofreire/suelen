@@ -21,7 +21,7 @@ export function Resultados() {
         </h2>
         <p className="mt-5 text-ink-soft">
           Conheça alguns resultados reais e autorizados de pacientes atendidos
-          pela Dra. Suelen Paranhos.
+          pela Dra. Suelen Paranho.
         </p>
       </Reveal>
 

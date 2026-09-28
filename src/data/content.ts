@@ -129,13 +129,13 @@ export const faq = [
  * diagnostico, emocao ou grau de resultado.
  */
 export const resultados = [
-  { foto: fotos.resultadoFullFace01, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace02, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace03, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace04, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace05, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
-  { foto: fotos.resultadoToxina, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de aplicação de toxina botulínica." },
-  { foto: fotos.resultadoLabial, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de preenchimento labial." },
+  { foto: fotos.resultadoFullFace01, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace02, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace03, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace04, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace05, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de planejamento Full Face." },
+  { foto: fotos.resultadoToxina, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de aplicação de toxina botulínica." },
+  { foto: fotos.resultadoLabial, alt: "Paciente atendida pela Dra. Suelen Paranho, registro de preenchimento labial." },
 ] as const;
 
 /**
@@ -144,11 +144,11 @@ export const resultados = [
  * foram recebidas.
  */
 export const depoimentos = [
-  { foto: fotos.depoimento01, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
-  { foto: fotos.depoimento02, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
-  { foto: fotos.depoimento03, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
-  { foto: fotos.depoimento04, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
-  { foto: fotos.depoimento05, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
+  { foto: fotos.depoimento01, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranho." },
+  { foto: fotos.depoimento02, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranho." },
+  { foto: fotos.depoimento03, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranho." },
+  { foto: fotos.depoimento04, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranho." },
+  { foto: fotos.depoimento05, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranho." },
 ] as const;
 
 export const AVISO_RESULTADOS =
