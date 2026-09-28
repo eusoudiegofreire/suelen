@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { siteConfig } from "@/config/site";
+import { fotos } from "@/data/images";
 import "./globals.css";
 
 /* Duas familias: uma serifada com carater para titulos, uma neutra e muito
@@ -19,7 +20,7 @@ const inter = Inter({
 });
 
 const TITULO =
-  "Full Face e Harmonização Orofacial em Ariquemes | Instituto Suelen Paranhos";
+  "Full Face e Harmonização Orofacial em Ariquemes | Dra. Suelen Paranhos";
 const DESCRICAO =
   "Avaliação facial individualizada, Full Face e procedimentos de harmonização orofacial com a Dra. Suelen Paranhos em Ariquemes–RO.";
 
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     "estética facial",
     "toxina botulínica",
     "preenchimento labial",
-    "Instituto Suelen Paranhos",
+    "Dra. Suelen Paranhos",
   ],
   alternates: { canonical: "/" },
   openGraph: {
@@ -49,9 +50,9 @@ export const metadata: Metadata = {
     description: DESCRICAO,
     images: [
       {
-        url: "/fotos/suelen-hero.webp",
-        width: 1400,
-        height: 2100,
+        url: fotos.heroSuelen.src,
+        width: fotos.heroSuelen.width,
+        height: fotos.heroSuelen.height,
         alt: `${siteConfig.professional.name} — ${siteConfig.name}`,
       },
     ],
@@ -60,18 +61,18 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITULO,
     description: DESCRICAO,
-    images: ["/fotos/suelen-hero.webp"],
+    images: [fotos.heroSuelen.src],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#faf7f2",
+  themeColor: "#f7f3ed",
   colorScheme: "light",
 };
 
 /**
- * Dados estruturados. Apenas informacoes confirmadas pelo Instituto:
+ * Dados estruturados. Apenas informacoes confirmadas pela clinica:
  * nao ha telefone, horario de funcionamento, avaliacoes, faixa de preco
  * nem logradouro, porque esses dados ainda nao foram informados.
  */
@@ -81,11 +82,11 @@ function dadosEstruturados() {
     "@graph": [
       {
         "@type": ["MedicalBusiness", "Dentist"],
-        "@id": `${siteConfig.url}/#instituto`,
+        "@id": `${siteConfig.url}/#clinica`,
         name: siteConfig.name,
         description: DESCRICAO,
         url: siteConfig.url,
-        image: `${siteConfig.url}/fotos/suelen-hero.webp`,
+        image: `${siteConfig.url}${fotos.heroSuelen.src}`,
         medicalSpecialty: "Dentistry",
         areaServed: {
           "@type": "City",
@@ -110,7 +111,7 @@ function dadosEstruturados() {
         jobTitle: "Cirurgiã-Dentista",
         knowsAbout: "Harmonização Orofacial",
         identifier: siteConfig.professional.registry,
-        worksFor: { "@id": `${siteConfig.url}/#instituto` },
+        worksFor: { "@id": `${siteConfig.url}/#clinica` },
       },
     ],
   };

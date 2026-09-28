@@ -84,7 +84,7 @@ export function FloatingCta() {
         rel="noopener noreferrer"
         tabIndex={visivel ? undefined : -1}
         aria-hidden={!visivel}
-        className="flex min-h-14 items-center justify-center gap-2.5 rounded-[3px] bg-gold px-6 text-[0.98rem] font-medium text-white shadow-[0_6px_24px_-6px_rgba(42,37,34,0.45)]"
+        className="flex min-h-14 items-center justify-center gap-2.5 rounded-[3px] bg-wine px-6 text-[0.98rem] font-medium text-white shadow-[0_6px_24px_-6px_rgba(42,37,34,0.45)]"
       >
         <WhatsappGlyph className="h-5 w-5" />
         Agendar avaliação

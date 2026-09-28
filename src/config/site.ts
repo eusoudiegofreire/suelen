@@ -22,18 +22,21 @@ export const siteConfig = {
 
   // Mensagem que ja vem escrita quando a pessoa abre a conversa.
   WHATSAPP_MESSAGE:
-    "Olá! Conheci o Instituto pelo site e gostaria de agendar uma avaliação.",
+    "Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de agendar uma avaliação.",
 
   // --------------------------------------------------------------------
   // IDENTIFICACAO
   // --------------------------------------------------------------------
-  name: "Instituto Suelen Paranhos",
-  shortName: "Instituto Suelen Paranhos",
-  tagline: "Odontologia · Saúde · Estética",
+  name: "Dra. Suelen Paranhos",
+  shortName: "Dra. Suelen Paranhos",
+  /** Linha de apoio da assinatura, como aparece na logo oficial. */
+  tagline: "Harmonização Orofacial",
 
   professional: {
     name: "Dra. Suelen Paranhos",
     title: "Cirurgiã-Dentista, especialista em Harmonização Orofacial",
+    /** Versao curta, usada na linha de assinatura do topo. */
+    titleShort: "Especialista em Harmonização Orofacial",
     registry: "CRO-RO 3294",
   },
 
@@ -69,7 +72,7 @@ export const siteConfig = {
   // SEO
   // --------------------------------------------------------------------
   // TODO: trocar pelo dominio definitivo quando ele for contratado.
-  url: "https://institutosuelenparanhos.com.br",
+  url: "https://drasuelenparanhos.com.br",
 } as const;
 
 /**

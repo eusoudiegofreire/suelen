@@ -19,7 +19,9 @@ const OUT = path.join("public", "fotos");
  * Serve para gerar um enquadramento diferente a partir da mesma foto.
  */
 const JOBS = [
-  { key: "heroSuelen", file: "suelen-paranhos-01.jpeg", out: "suelen-hero.webp", width: 1400 },
+  // Versao com o fundo do estudio reeditado pelo cliente para acompanhar o
+  // creme da pagina. O original sem edicao continua em suelen-paranhos-01.jpeg.
+  { key: "heroSuelen", file: "suelen-paranhos-01-editada.png", out: "suelen-hero-2.webp", width: 1400 },
   { key: "suelenFullFace", file: "suelen-paranhos-02.jpeg", out: "suelen-full-face.webp", width: 1300 },
   {
     key: "suelenSobre",

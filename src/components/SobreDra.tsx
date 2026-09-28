@@ -12,7 +12,7 @@ export function SobreDra() {
         <Reveal className="relative mx-auto w-full max-w-sm lg:max-w-none">
           <div
             aria-hidden="true"
-            className="absolute -bottom-4 -left-4 hidden h-full w-full border border-gold-bright/35 sm:block"
+            className="absolute -bottom-4 -left-4 hidden h-full w-full border border-gold/45 sm:block"
           />
           <Image
             src={fotos.suelenSobre.src}
@@ -37,7 +37,7 @@ export function SobreDra() {
               {siteConfig.professional.name}
             </h2>
 
-            <p className="mt-4 border-l-2 border-gold-bright pl-5 text-[0.95rem] leading-relaxed text-ink-muted">
+            <p className="mt-4 border-l-2 border-gold pl-5 text-[0.95rem] leading-relaxed text-ink-muted">
               {siteConfig.professional.title}
               <br />
               {siteConfig.professional.registry}

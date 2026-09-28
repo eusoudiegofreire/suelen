@@ -1,6 +1,6 @@
 /**
  * Todo o texto do site em um unico arquivo, para revisao e edicao sem mexer
- * na marcacao. Os textos sao os fornecidos pelo Instituto — nenhum numero,
+ * na marcacao. Os textos sao os fornecidos pela clinica — nenhum numero,
  * resultado, depoimento ou credencial foi acrescentado.
  */
 
@@ -114,7 +114,7 @@ export const faq = [
   {
     pergunta: "Quais são as formas de pagamento?",
     resposta:
-      "O Instituto trabalha com pagamento à vista e parcelamento no cartão. As condições disponíveis são informadas pela equipe.",
+      "A clínica trabalha com pagamento à vista e parcelamento no cartão. As condições disponíveis são informadas pela equipe.",
   },
   {
     pergunta: "Como funciona o acompanhamento?",
@@ -129,13 +129,13 @@ export const faq = [
  * diagnostico, emocao ou grau de resultado.
  */
 export const resultados = [
-  { foto: fotos.resultadoFullFace01, alt: "Paciente atendida no Instituto, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace02, alt: "Paciente atendida no Instituto, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace03, alt: "Paciente atendida no Instituto, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace04, alt: "Paciente atendida no Instituto, registro de planejamento Full Face." },
-  { foto: fotos.resultadoFullFace05, alt: "Paciente atendida no Instituto, registro de planejamento Full Face." },
-  { foto: fotos.resultadoToxina, alt: "Paciente atendida no Instituto, registro de aplicação de toxina botulínica." },
-  { foto: fotos.resultadoLabial, alt: "Paciente atendida no Instituto, registro de preenchimento labial." },
+  { foto: fotos.resultadoFullFace01, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace02, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace03, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace04, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
+  { foto: fotos.resultadoFullFace05, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de planejamento Full Face." },
+  { foto: fotos.resultadoToxina, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de aplicação de toxina botulínica." },
+  { foto: fotos.resultadoLabial, alt: "Paciente atendida pela Dra. Suelen Paranhos, registro de preenchimento labial." },
 ] as const;
 
 /**
@@ -144,11 +144,11 @@ export const resultados = [
  * foram recebidas.
  */
 export const depoimentos = [
-  { foto: fotos.depoimento01, alt: "Print de mensagem enviada por paciente ao Instituto Suelen Paranhos." },
-  { foto: fotos.depoimento02, alt: "Print de mensagem enviada por paciente ao Instituto Suelen Paranhos." },
-  { foto: fotos.depoimento03, alt: "Print de mensagem enviada por paciente ao Instituto Suelen Paranhos." },
-  { foto: fotos.depoimento04, alt: "Print de mensagem enviada por paciente ao Instituto Suelen Paranhos." },
-  { foto: fotos.depoimento05, alt: "Print de mensagem enviada por paciente ao Instituto Suelen Paranhos." },
+  { foto: fotos.depoimento01, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
+  { foto: fotos.depoimento02, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
+  { foto: fotos.depoimento03, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
+  { foto: fotos.depoimento04, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
+  { foto: fotos.depoimento05, alt: "Print de mensagem enviada por paciente à Dra. Suelen Paranhos." },
 ] as const;
 
 export const AVISO_RESULTADOS =

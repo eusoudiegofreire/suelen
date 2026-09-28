@@ -30,7 +30,7 @@ export function Identificacao() {
             seu caso.
           </p>
 
-          <blockquote className="mt-9 border-l-2 border-gold-bright pl-6 font-display text-[1.3rem] leading-snug text-ink sm:text-[1.5rem]">
+          <blockquote className="mt-9 border-l-2 border-gold pl-6 font-display text-[1.3rem] leading-snug text-ink sm:text-[1.5rem]">
             O primeiro passo não é escolher um procedimento. É entender o que
             realmente faz sentido para você.
           </blockquote>

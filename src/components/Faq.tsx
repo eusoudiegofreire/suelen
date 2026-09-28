@@ -32,7 +32,7 @@ export function Faq() {
                   {item.pergunta}
                   <span
                     aria-hidden="true"
-                    className="relative mt-1 h-3.5 w-3.5 shrink-0 text-gold-bright"
+                    className="relative mt-1 h-3.5 w-3.5 shrink-0 text-gold"
                   >
                     <span className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-current" />
                     <span className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 rotate-90 bg-current transition-transform duration-300 group-open:rotate-0" />

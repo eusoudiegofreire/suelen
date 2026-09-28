@@ -14,7 +14,7 @@ export function Eyebrow({
   return (
     <p
       className={`eyebrow flex items-center gap-3 ${
-        tone === "dark" ? "text-gold-light" : "text-gold"
+        tone === "dark" ? "text-gold-light" : "text-gold-deep"
       }`}
     >
       <span
@@ -46,9 +46,9 @@ export function WhatsappCta({
     "group inline-flex min-h-13 items-center justify-center gap-2.5 px-7 py-3.5 text-[0.95rem] font-medium tracking-[0.01em] transition-colors duration-300 rounded-[2px]";
 
   const variants = {
-    solid: "bg-gold text-white hover:bg-ink",
-    outline: "border border-ink/25 text-ink hover:border-gold hover:text-gold",
-    onDark: "bg-gold-light text-ink hover:bg-ivory",
+    solid: "bg-wine text-white hover:bg-wine-deep",
+    outline: "border border-wine/45 text-wine hover:bg-wine hover:text-white",
+    onDark: "bg-ivory text-wine hover:bg-white",
   } as const;
 
   return (

@@ -1,31 +1,38 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   DESIGN TOKENS — Instituto Suelen Paranhos
-   Paleta derivada da identidade real da clinica (letreiro dourado sobre
-   marmore branco, madeira ripada clara, marcenaria off-white).
-   Os contrastes foram verificados em scripts/check-contrast.mjs (WCAG AA+).
+   SISTEMA DE COR
+   O dourado vem da propria logo (amostrado em public/marca/, mediana #c19638)
+   e representa a marca. O vinho conduz a acao. Conferir em
+   `node scripts/check-contrast.mjs` depois de qualquer mudanca aqui.
    ========================================================================== */
 @theme {
   /* Fundos */
-  --color-ivory: #faf7f2; /* marfim — fundo padrao */
-  --color-sand: #f3eee6; /* areia — secoes alternadas */
+  --color-ivory: #f7f3ed; /* marfim — fundo padrao */
+  --color-sand: #efe5dc; /* bege — secoes alternadas */
   --color-shell: #ffffff; /* branco — cards e superficies */
 
   /* Texto */
-  --color-ink: #2a2522; /* grafite amarronzado — 14.18:1 */
-  --color-ink-soft: #5f564d; /* texto de apoio — 6.72:1 */
-  --color-ink-muted: #6b6158; /* legendas — 5.65:1 */
+  --color-ink: #272321; /* grafite — 14.09:1 */
+  --color-ink-soft: #625a55; /* texto de apoio — 6.10:1 */
+  --color-ink-muted: #625a55; /* legendas — 6.10:1 */
 
-  /* Ouro — o acento da marca */
-  --color-gold: #8a6d2f; /* texto e botoes — 4.56:1 */
-  --color-gold-bright: #a8873e; /* filetes e titulos grandes */
-  --color-gold-light: #c9ae74; /* sobre fundo escuro — 7.06:1 */
+  /* Vinho — conversao: botoes, CTA flutuante, destaque da headline */
+  --color-wine: #8b263d; /* 7.78:1 AAA */
+  --color-wine-deep: #6f1e31; /* hover — 11.02:1 AAA */
+  --color-rose: #e8d8d1; /* formas organicas e transicoes */
+
+  /* Dourado — marca: logo, etiquetas, filetes, numeros, detalhes */
+  /* ATENCAO: 2.47:1 sobre o marfim. Decorativo e logo, NUNCA texto em fundo
+     claro. Sobre a secao escura chega a 5.70:1 e ai pode ser texto. */
+  --color-gold: #c19638; /* dourado da logo */
+  --color-gold-deep: #8a6a22; /* derivado p/ texto em fundo claro — 4.56:1 */
+  --color-gold-light: #d8b05a; /* brilho da logo, sobre fundo escuro */
 
   /* Detalhes */
-  --color-line: #e6dccd; /* bordas sutis */
-  --color-line-soft: #efe7db;
-  --color-wine: #6e2e36; /* vinho suave, uso pontual — 9.33:1 */
+  --color-line: #e3d8cb; /* bordas sutis */
+  --color-line-soft: #eee5da;
+  --color-hairline: rgba(39, 35, 33, 0.12); /* bordas do topo e do hero */
 
   /* Tipografia */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -104,7 +111,7 @@ p {
   display: inline-block;
   width: 2rem;
   height: 1px;
-  background-color: var(--color-gold-bright);
+  background-color: var(--color-gold);
 }
 
 /* Pequeno caps tracked — linguagem editorial das etiquetas */

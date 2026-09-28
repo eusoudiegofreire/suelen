@@ -77,7 +77,7 @@ export function Depoimentos() {
             onClick={() => passo(-1)}
             disabled={ativo === 0}
             aria-label="Depoimento anterior"
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-gold hover:text-gold disabled:opacity-35 disabled:hover:border-line disabled:hover:text-ink"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-gold hover:text-gold-deep disabled:opacity-35 disabled:hover:border-line disabled:hover:text-ink"
           >
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-4 w-4">
               <path d="M12 4.5 6.5 10l5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -88,7 +88,7 @@ export function Depoimentos() {
             onClick={() => passo(1)}
             disabled={ativo === depoimentos.length - 1}
             aria-label="Próximo depoimento"
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-gold hover:text-gold disabled:opacity-35 disabled:hover:border-line disabled:hover:text-ink"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-gold hover:text-gold-deep disabled:opacity-35 disabled:hover:border-line disabled:hover:text-ink"
           >
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-4 w-4">
               <path d="m8 4.5 5.5 5.5L8 15.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -115,7 +115,7 @@ export function Depoimentos() {
                 type="button"
                 onClick={(e) => abrir(i, e.currentTarget)}
                 aria-label={`Ampliar depoimento ${i + 1} de ${depoimentos.length}`}
-                className="block w-full cursor-zoom-in border border-line bg-shell p-3 transition-colors hover:border-gold-bright"
+                className="block w-full cursor-zoom-in border border-line bg-shell p-3 transition-colors hover:border-gold"
               >
                 <Image
                   src={item.foto.src}
@@ -146,7 +146,7 @@ export function Depoimentos() {
           >
             <span
               className={`block h-[3px] w-full transition-colors duration-300 ${
-                i === ativo ? "bg-gold" : "bg-line group-hover:bg-gold-bright/60"
+                i === ativo ? "bg-gold" : "bg-line group-hover:bg-gold/60"
               }`}
             />
           </button>

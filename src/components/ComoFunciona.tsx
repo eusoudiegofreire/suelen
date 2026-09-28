@@ -21,7 +21,7 @@ export function ComoFunciona() {
             <div className="flex items-center gap-4">
               <span
                 aria-hidden="true"
-                className="font-display text-[2.6rem] leading-none text-gold-bright/45"
+                className="font-display text-[2.6rem] leading-none text-gold/55"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>

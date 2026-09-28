@@ -11,7 +11,7 @@ export function Diferenciais() {
         {/* Texto */}
         <div>
           <Reveal>
-            <Eyebrow>Por que escolher o Instituto</Eyebrow>
+            <Eyebrow>Por que escolher a Dra. Suelen Paranhos</Eyebrow>
             <h2
               id="diferenciais-titulo"
               className="mt-6 text-[1.75rem] sm:text-4xl lg:text-[2.5rem]"
@@ -36,7 +36,7 @@ export function Diferenciais() {
                 >
                   <span
                     aria-hidden="true"
-                    className="mt-[0.6rem] h-1 w-1 shrink-0 rotate-45 bg-gold-bright"
+                    className="mt-[0.6rem] h-1 w-1 shrink-0 rotate-45 bg-gold"
                   />
                   {item}
                 </li>
@@ -57,7 +57,7 @@ export function Diferenciais() {
               blurDataURL={fotos.ambienteEntrada.blurDataURL}
               placeholder="blur"
               sizes="(min-width: 1024px) 30vw, (min-width: 640px) 40vw, 72vw"
-              alt="Recepção do Instituto Suelen Paranhos, com balcão em mármore e letreiro dourado na parede."
+              alt="Recepção da clínica da Dra. Suelen Paranhos, com balcão em mármore e letreiro dourado na parede."
               className="h-auto w-[82%] object-cover"
             />
 
@@ -68,11 +68,11 @@ export function Diferenciais() {
               blurDataURL={fotos.ambienteSala.blurDataURL}
               placeholder="blur"
               sizes="(min-width: 1024px) 22vw, (min-width: 640px) 28vw, 52vw"
-              alt="Sala de atendimento do Instituto, com mesa branca, cadeiras e letreiro da Dra. Suelen Paranhos."
+              alt="Sala de atendimento, com mesa branca, cadeiras e letreiro da Dra. Suelen Paranhos."
               className="absolute right-0 bottom-8 h-auto w-[58%] border-4 border-sand object-cover"
             />
             <figcaption className="sr-only">
-              Recepção e sala de atendimento do Instituto Suelen Paranhos, em
+              Recepção e sala de atendimento da Dra. Suelen Paranhos, em
               Ariquemes - RO.
             </figcaption>
           </figure>

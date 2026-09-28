@@ -71,7 +71,7 @@ export function FullFace() {
             <div className="mt-9">
               <WhatsappCta
                 variant="onDark"
-                message="Olá! Conheci o Instituto pelo site e gostaria de agendar uma avaliação Full Face."
+                message="Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de agendar uma avaliação Full Face."
               >
                 Agendar avaliação Full Face
               </WhatsappCta>
@@ -83,7 +83,7 @@ export function FullFace() {
         <Reveal delay={120} className="relative mx-auto w-full max-w-sm lg:sticky lg:top-28 lg:max-w-none">
           <div
             aria-hidden="true"
-            className="absolute -top-4 -right-4 hidden h-full w-full border border-gold-light/30 sm:block"
+            className="absolute -top-4 -right-4 hidden h-full w-full border border-gold-light/35 sm:block"
           />
           <Image
             src={fotos.suelenFullFace.src}

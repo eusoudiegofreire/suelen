@@ -10,10 +10,10 @@ export type FotoOtimizada = {
 
 export const fotos = {
   "heroSuelen": {
-    "src": "/fotos/suelen-hero.webp",
-    "width": 1400,
-    "height": 2100,
-    "blurDataURL": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOkEnhKT0zZI4787LCgAPxd5LA77MiZjefK44I91qfxpcHzHR/fDnbzbObJmtcA/bomvlOU4yTjW3xM53X4EdZsbZDt1698b4Nm58Wg9D6RZ8P3Bs/3SdF7mc1bmeX96fOmg0l9Wj+RTTQBdM2GXJiVprfM7rR50bQzFaNX4w9turlCkpFeRtmq9siZiFrXxoNQAAA="
+    "src": "/fotos/suelen-hero-2.webp",
+    "width": 1024,
+    "height": 1536,
+    "blurDataURL": "data:image/webp;base64,UklGRtQAAABXRUJQVlA4IMgAAADQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOmUFH/DyUGUSBal+pgK6qzLXprAAD+79eGVggBhRNSta/stt4uiwAgmghfCkV8tP4Xx5pRmhIPaR4ZmFeXwisOyotaCGpF7XEZbYnMq4cjLiSTKnTcX+VinIIZEuUPtompYYQ/ojLd/JPOMQZBaUVvvuc+2AEgOz+6AXmJpZPLYQtAXzp5w37DdLvdB0mXrb0VT5iTrKb2XjUBQCWCi8IJbSr/zdA4ixF087AAAA=="
   },
   "suelenFullFace": {
     "src": "/fotos/suelen-full-face.webp",

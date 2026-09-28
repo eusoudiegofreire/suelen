@@ -1,13 +1,20 @@
 import { siteConfig } from "@/config/site";
 import { Section, WhatsappCta } from "./ui/Primitives";
-import { Monogram } from "./ui/Monogram";
+import Image from "next/image";
 import { Reveal } from "./ui/Reveal";
 
 export function CtaFinal() {
   return (
     <Section id="agendar" tone="ink" labelledBy="cta-final-titulo">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <Monogram className="mx-auto h-14 w-14 text-gold-light" />
+        <Image
+          src="/marca/logo-simbolo-branco.png"
+          width={640}
+          height={575}
+          alt=""
+          aria-hidden="true"
+          className="mx-auto h-20 w-auto sm:h-24"
+        />
 
         <h2
           id="cta-final-titulo"
@@ -35,8 +42,6 @@ export function CtaFinal() {
             {siteConfig.address.city} – {siteConfig.address.state}
           </p>
           <p className="mt-4 text-[0.88rem] leading-relaxed text-ivory/70">
-            {siteConfig.professional.name}
-            <br />
             {siteConfig.professional.title}
             <br />
             {siteConfig.professional.registry}

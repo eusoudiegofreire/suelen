@@ -18,7 +18,7 @@ export function Condicoes() {
         <Reveal delay={90}>
           <div className="space-y-5 text-ink-soft">
             <p>
-              O Instituto trabalha com pagamento à vista e parcelamento no
+              A clínica trabalha com pagamento à vista e parcelamento no
               cartão.
             </p>
             <p>
@@ -36,7 +36,7 @@ export function Condicoes() {
           <div className="mt-9">
             <WhatsappCta
               variant="outline"
-              message="Olá! Conheci o Instituto pelo site e gostaria de consultar a disponibilidade e as condições."
+              message="Olá! Conheci o site da Dra. Suelen Paranhos e gostaria de consultar a disponibilidade e as condições."
             >
               Consultar disponibilidade e condições
             </WhatsappCta>

@@ -1,5 +1,5 @@
 import { navLinks, siteConfig, whatsappUrl } from "@/config/site";
-import { Monogram } from "./ui/Monogram";
+import { Marca } from "./ui/Marca";
 import { WhatsappGlyph } from "./ui/Primitives";
 
 export function Footer() {
@@ -11,25 +11,9 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr]">
           {/* Identificação */}
           <div>
-            <div className="flex items-center gap-3">
-              <Monogram className="h-10 w-10 shrink-0 text-gold-bright" />
-              <span className="flex flex-col leading-none">
-                <span className="font-display text-[0.78rem] text-ink-muted">
-                  Instituto
-                </span>
-                <span className="text-[0.88rem] font-medium tracking-[0.16em] text-ink uppercase">
-                  Suelen Paranhos
-                </span>
-              </span>
-            </div>
+            <Marca />
 
-            <p className="mt-5 text-[0.85rem] tracking-[0.1em] text-gold uppercase">
-              {siteConfig.tagline}
-            </p>
-
-            <p className="mt-4 text-[0.9rem] leading-relaxed text-ink-soft">
-              {siteConfig.professional.name}
-              <br />
+            <p className="mt-5 text-[0.9rem] leading-relaxed text-ink-soft">
               {siteConfig.professional.title}
               <br />
               {siteConfig.professional.registry}
@@ -44,7 +28,7 @@ export function Footer() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="inline-flex min-h-9 items-center text-[0.92rem] text-ink-soft transition-colors hover:text-gold"
+                    className="inline-flex min-h-9 items-center text-[0.92rem] text-ink-soft transition-colors hover:text-wine"
                   >
                     {link.label}
                   </a>
@@ -67,9 +51,9 @@ export function Footer() {
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-11 items-center gap-2.5 text-[0.92rem] font-medium text-ink transition-colors hover:text-gold"
+              className="mt-4 inline-flex min-h-11 items-center gap-2.5 text-[0.92rem] font-medium text-ink transition-colors hover:text-wine"
             >
-              <WhatsappGlyph className="h-4.5 w-4.5 text-gold" />
+              <WhatsappGlyph className="h-4.5 w-4.5 text-gold-deep" />
               Falar pelo WhatsApp
             </a>
 
@@ -80,9 +64,9 @@ export function Footer() {
                 href={siteConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 flex min-h-11 items-center gap-2.5 text-[0.92rem] font-medium text-ink transition-colors hover:text-gold"
+                className="mt-1 flex min-h-11 items-center gap-2.5 text-[0.92rem] font-medium text-ink transition-colors hover:text-wine"
               >
-                <InstagramGlyph className="h-4.5 w-4.5 text-gold" />
+                <InstagramGlyph className="h-4.5 w-4.5 text-gold-deep" />
                 {siteConfig.social.instagramHandle || "Instagram"}
               </a>
             )}

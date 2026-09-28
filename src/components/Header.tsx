@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { navLinks, siteConfig, whatsappUrl } from "@/config/site";
-import { Monogram } from "./ui/Monogram";
+import { WhatsappGlyph } from "./ui/Primitives";
+import { Marca } from "./ui/Marca";
 
 export function Header() {
   const [aberto, setAberto] = useState(false);
@@ -32,35 +33,35 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         rolou
-          ? "border-b border-line bg-ivory/92 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+          ? "border-b border-[var(--color-hairline)] bg-ivory/92 backdrop-blur-md"
+          : "border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
+      {/* Mesmo container do Hero, para o logotipo alinhar com a headline */}
+      <div className="mx-auto flex h-20 max-w-[1540px] items-center gap-6 px-6 sm:px-10 lg:h-22 lg:px-12">
+        {/* Simbolo oficial + nome escrito em HTML (ver nota em ui/Marca.tsx) */}
         <a
           href="#inicio"
-          className="flex items-center gap-2.5 text-ink"
+          className="shrink-0"
           aria-label={`${siteConfig.name} — ir para o início`}
         >
-          <Monogram className="h-9 w-9 shrink-0 text-gold-bright" />
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-[0.7rem] tracking-[0.02em] text-ink-muted">
-              Instituto
-            </span>
-            <span className="text-[0.82rem] font-medium tracking-[0.16em] text-ink uppercase">
-              Suelen Paranhos
-            </span>
-          </span>
+          <Marca />
         </a>
 
-        {/* Navegação — desktop */}
-        <nav aria-label="Navegação principal" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
+        {/* Filete dourado entre o logotipo e a navegacao */}
+        <span
+          aria-hidden="true"
+          className="hidden h-px w-14 shrink-0 bg-gold/70 xl:block"
+        />
+
+        {/* Navegacao — desktop */}
+        <nav aria-label="Navegação principal" className="hidden flex-1 lg:block">
+          <ul className="flex items-center justify-center gap-5 xl:gap-9">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="relative text-[0.92rem] text-ink-soft transition-colors hover:text-ink after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-gold-bright after:transition-all after:duration-300 hover:after:w-full"
+                  className="relative inline-flex min-h-11 items-center whitespace-nowrap text-[0.9rem] text-ink-soft xl:text-[0.97rem] transition-colors hover:text-wine after:absolute after:bottom-2.5 after:left-0 after:h-px after:w-0 after:bg-wine after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {link.label}
                 </a>
@@ -69,13 +70,15 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 lg:ml-0">
+          {/* Botao contornado, como na referencia */}
           <a
             href={whatsappUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden min-h-11 items-center rounded-[2px] bg-gold px-5 text-[0.88rem] font-medium text-white transition-colors hover:bg-ink sm:inline-flex"
+            className="hidden min-h-12 items-center gap-2.5 rounded-full border border-wine/45 px-5 whitespace-nowrap xl:px-6 text-[0.92rem] font-medium text-wine transition-colors duration-300 hover:bg-wine hover:text-white sm:inline-flex"
           >
+            <WhatsappGlyph className="h-4.5 w-4.5" />
             Agendar avaliação
           </a>
 
@@ -94,7 +97,7 @@ export function Header() {
                 }`}
               />
               <span
-                className={`absolute left-0 top-2 h-px w-6 bg-current transition-opacity duration-200 ${
+                className={`absolute top-2 left-0 h-px w-6 bg-current transition-opacity duration-200 ${
                   aberto ? "opacity-0" : "opacity-100"
                 }`}
               />
@@ -108,16 +111,19 @@ export function Header() {
         </div>
       </div>
 
-      {/* Navegação — mobile */}
+      {/* Navegacao — mobile */}
       <div
         id="menu-mobile"
         hidden={!aberto}
-        className="border-t border-line bg-ivory lg:hidden"
+        className="border-t border-[var(--color-hairline)] bg-ivory lg:hidden"
       >
-        <nav aria-label="Navegação principal (celular)" className="px-5 py-6 sm:px-8">
+        <nav aria-label="Navegação principal (celular)" className="px-6 py-6 sm:px-10">
           <ul className="flex flex-col">
             {navLinks.map((link) => (
-              <li key={link.href} className="border-b border-line-soft last:border-0">
+              <li
+                key={link.href}
+                className="border-b border-[var(--color-hairline)] last:border-0"
+              >
                 <a
                   href={link.href}
                   onClick={() => setAberto(false)}
@@ -133,8 +139,9 @@ export function Header() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setAberto(false)}
-            className="mt-6 flex min-h-13 items-center justify-center rounded-[2px] bg-gold px-6 font-medium text-white"
+            className="mt-6 flex min-h-14 items-center justify-center gap-2.5 rounded-full bg-wine px-6 font-medium text-white"
           >
+            <WhatsappGlyph className="h-5 w-5" />
             Agendar avaliação
           </a>
         </nav>
