@@ -21,6 +21,7 @@
   --color-wine: #8b263d; /* 7.78:1 AAA */
   --color-wine-deep: #6f1e31; /* hover — 11.02:1 AAA */
   --color-rose: #e8d8d1; /* formas organicas e transicoes */
+  --color-rose-soft: #f8efea; /* alternativa selecionada — grafite da 13.74:1 */
 
   /* Dourado — marca: logo, etiquetas, filetes, numeros, detalhes */
   /* ATENCAO: 2.47:1 sobre o marfim. Decorativo e logo, NUNCA texto em fundo
@@ -92,6 +93,14 @@ p {
   border-radius: 2px;
 }
 
+/* Titulos que recebem foco apenas por programa (troca de etapa de
+   formulario). O foco existe para o leitor de tela anunciar o novo conteudo;
+   mostrar o anel confundiria quem enxerga, porque ninguem navegou ate ali. */
+[data-foco-programatico]:focus,
+[data-foco-programatico]:focus-visible {
+  outline: none;
+}
+
 /* Fundo escuro precisa de um foco claro para continuar visivel */
 .on-dark :focus-visible {
   outline-color: var(--color-gold-light);
@@ -120,6 +129,21 @@ p {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+/* Entrada de cada etapa do formulario do Curso VIP */
+@keyframes etapa-entra {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.etapa-entra {
+  animation: etapa-entra 0.32s var(--ease-soft) both;
 }
 
 /* Barra de rolagem discreta nos carrosseis horizontais */
