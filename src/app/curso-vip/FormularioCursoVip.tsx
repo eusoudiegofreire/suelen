@@ -5,8 +5,8 @@ import { siteConfig, whatsappUrl } from "@/config/site";
 import { etapasCursoVip, TOTAL_ETAPAS } from "@/data/curso-vip";
 
 /**
- * Formulario de qualificacao do Curso VIP: tres perguntas, uma por tela, e
- * uma tela final de contato.
+ * Formulario de qualificacao do Curso VIP: tres perguntas, uma por tela, uma
+ * tela de contato e a confirmacao.
  *
  * Decisoes que importam:
  * - Alternativas sao <input type="radio"> reais dentro de <fieldset>/<legend>,
@@ -17,10 +17,10 @@ import { etapasCursoVip, TOTAL_ETAPAS } from "@/data/curso-vip";
  *   escolhido.
  * - Nenhuma alternativa bloqueia o envio. O formulario coleta informacao;
  *   quem avalia compatibilidade e a equipe, depois.
- * - No envio o WhatsApp abre PRIMEIRO, ainda dentro do gesto do clique, para
- *   o navegador nao tratar como pop-up bloqueado. O envio ao CRM vai em
- *   seguida e nunca trava a pessoa: se falhar, a conversa do WhatsApp ja leva
- *   todas as respostas, entao o lead nao se perde.
+ * - O ultimo botao conclui o CADASTRO. O WhatsApp so aparece depois, na tela
+ *   de confirmacao, como um link que a pessoa clica. Assim o cadastro e um
+ *   passo fechado em si, e o WhatsApp deixa de ser pop-up aberto por script
+ *   (que o navegador costuma bloquear) e vira navegacao normal.
  */
 
 const TOTAL_PERGUNTAS = etapasCursoVip.length;
@@ -43,6 +43,7 @@ export function FormularioCursoVip() {
   const [telefone, setTelefone] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [concluido, setConcluido] = useState(false);
 
   const tituloRef = useRef<HTMLHeadingElement>(null);
   const raizRef = useRef<HTMLDivElement>(null);
@@ -52,13 +53,13 @@ export function FormularioCursoVip() {
   const atual = etapaContato ? null : etapasCursoVip[etapa];
   const resposta = etapaContato ? null : respostas[etapa];
 
-  // Ao trocar de etapa: traz o formulario para o topo da tela e leva o foco
-  // para o titulo novo.
+  // Ao trocar de tela: traz o formulario para o topo e leva o foco para o
+  // titulo novo.
   //
   // O scroll importa no celular, onde a apresentacao fica acima do formulario:
-  // sem ele a pessoa avanca e continua vendo o bloco anterior, com a pergunta
-  // nova e o botao fora da dobra. `preventScroll` evita o segundo salto que o
-  // focus() causaria por conta propria.
+  // sem ele a pessoa avanca e continua vendo o bloco anterior, com o conteudo
+  // novo fora da dobra. `preventScroll` evita o segundo salto que o focus()
+  // causaria por conta propria.
   useEffect(() => {
     if (primeiraRenderizacao.current) {
       primeiraRenderizacao.current = false;
@@ -70,7 +71,7 @@ export function FormularioCursoVip() {
       block: "start",
     });
     tituloRef.current?.focus({ preventScroll: true });
-  }, [etapa]);
+  }, [etapa, concluido]);
 
   function escolher(codigo: string) {
     setRespostas((anteriores) => {
@@ -85,7 +86,12 @@ export function FormularioCursoVip() {
   function respostasResolvidas() {
     return etapasCursoVip.map((e, i) => {
       const alt = e.alternativas.find((a) => a.codigo === respostas[i]);
-      return { id: e.id, rotulo: e.rotulo, valor: alt?.rotulo ?? "", codigo: alt?.codigo ?? "" };
+      return {
+        id: e.id,
+        rotulo: e.rotulo,
+        valor: alt?.rotulo ?? "",
+        codigo: alt?.codigo ?? "",
+      };
     });
   }
 
@@ -94,7 +100,7 @@ export function FormularioCursoVip() {
       (r, i) => `${i + 1}. ${r.rotulo}: ${r.valor}`
     );
     return [
-      `Olá! Quero participar do Curso VIP da ${siteConfig.professional.name}.`,
+      `Olá! Acabei de fazer meu cadastro no Curso VIP da ${siteConfig.professional.name}.`,
       "",
       `Meu nome é ${nome.trim()}.`,
       "",
@@ -106,7 +112,13 @@ export function FormularioCursoVip() {
     ].join("\n");
   }
 
-  /** Envia para o n8n (que cria o lead no Kommo). Falha nunca bloqueia a pessoa. */
+  /**
+   * Envia para o n8n (que cria o lead no Kommo).
+   *
+   * Uma falha aqui nao impede a conclusao: a pessoa cumpriu a parte dela e a
+   * tela de confirmacao aparece do mesmo jeito, com o botao do WhatsApp — que
+   * leva nome e respostas na mensagem e funciona como segunda via do lead.
+   */
   async function enviarParaCrm() {
     const r = respostasResolvidas();
     try {
@@ -133,7 +145,7 @@ export function FormularioCursoVip() {
     }
   }
 
-  function avancar() {
+  async function avancar() {
     // --- telas de pergunta ---
     if (!etapaContato) {
       if (!resposta) {
@@ -145,7 +157,7 @@ export function FormularioCursoVip() {
       return;
     }
 
-    // --- tela de contato ---
+    // --- tela de contato: conclui o cadastro ---
     if (nome.trim().length < 2) {
       setErro("Informe seu nome para continuar.");
       return;
@@ -158,12 +170,9 @@ export function FormularioCursoVip() {
 
     setErro(null);
     setEnviando(true);
-
-    // Abre o WhatsApp dentro do gesto do clique: depois de um await o
-    // navegador trataria como pop-up e bloquearia.
-    window.open(whatsappUrl(montarMensagem()), "_blank", "noopener,noreferrer");
-
-    void enviarParaCrm().finally(() => setEnviando(false));
+    await enviarParaCrm();
+    setEnviando(false);
+    setConcluido(true);
   }
 
   function voltar() {
@@ -171,10 +180,74 @@ export function FormularioCursoVip() {
     setEtapa((e) => Math.max(0, e - 1));
   }
 
-  const progresso = ((etapa + 1) / TOTAL_ETAPAS) * 100;
+  const progresso = concluido ? 100 : ((etapa + 1) / TOTAL_ETAPAS) * 100;
   const idErro = "curso-vip-erro";
-  const chave = etapaContato ? "contato" : atual!.id;
+  const chave = concluido ? "fim" : etapaContato ? "contato" : atual!.id;
 
+  /* ====================================================================
+     Confirmação
+     ==================================================================== */
+  if (concluido) {
+    return (
+      <div ref={raizRef} className="w-full scroll-mt-6">
+        <div className="h-[3px] w-full overflow-hidden rounded-full bg-line">
+          <div className="h-full w-full rounded-full bg-wine" />
+        </div>
+
+        <div key={chave} className="etapa-entra mt-9">
+          <span
+            aria-hidden="true"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-soft text-wine"
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
+              <path
+                d="m5 12.5 4.5 4.5L19 7.5"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+
+          <h2
+            ref={tituloRef}
+            tabIndex={-1}
+            data-foco-programatico=""
+            className="mt-6 font-display text-[1.6rem] leading-snug font-medium text-ink outline-none sm:text-[1.9rem]"
+          >
+            Cadastro concluído, {nome.trim().split(" ")[0]}
+          </h2>
+
+          <p className="mt-4 max-w-[30rem] text-[1rem] leading-[1.7] text-ink-soft">
+            Recebemos suas respostas. A equipe vai analisar as informações e
+            seguir com você pelo WhatsApp.
+          </p>
+
+          <p className="mt-3 max-w-[30rem] text-[0.95rem] leading-[1.7] text-ink-soft">
+            Se preferir, você mesma pode iniciar a conversa agora — suas
+            respostas já vão junto na mensagem.
+          </p>
+
+          <a
+            href={whatsappUrl(montarMensagem())}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-8 inline-flex min-h-[3.5rem] items-center justify-center gap-2.5 rounded-full bg-wine px-8 text-[1rem] font-medium text-white shadow-[0_14px_30px_-16px_rgba(139,38,61,0.7)] transition-colors duration-200 hover:bg-wine-deep"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.25 8.25-8.25Zm-2.53 4.4c-.15 0-.4.06-.61.28-.21.22-.8.79-.8 1.92s.82 2.23.94 2.38c.11.15 1.6 2.44 3.88 3.42.54.23.96.37 1.29.48.54.17 1.04.15 1.43.09.44-.07 1.34-.55 1.53-1.08.19-.53.19-.98.13-1.08-.06-.1-.21-.15-.43-.27-.22-.11-1.34-.66-1.54-.73-.21-.08-.36-.12-.51.11-.15.22-.58.73-.72.88-.13.15-.26.17-.49.06-.22-.11-.95-.35-1.81-1.12a6.78 6.78 0 0 1-1.25-1.56c-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.08-.15.04-.28-.02-.39-.06-.11-.5-1.23-.7-1.68-.18-.44-.37-.38-.5-.39h-.43Z" />
+            </svg>
+            Enviar mensagem no WhatsApp
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  /* ====================================================================
+     Etapas
+     ==================================================================== */
   return (
     <div ref={raizRef} className="w-full scroll-mt-6">
       {/* ----------------------------------------------------------------
@@ -214,15 +287,13 @@ export function FormularioCursoVip() {
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
-          avancar();
+          void avancar();
         }}
       >
         {/* key força a animação de entrada a cada troca de etapa */}
         <fieldset key={chave} className="etapa-entra mt-8 border-0 p-0">
           <legend className="sr-only">
-            {etapaContato
-              ? "Seus dados de contato"
-              : atual!.pergunta}
+            {etapaContato ? "Seus dados de contato" : atual!.pergunta}
           </legend>
 
           {/* Recebe o foco a cada troca de etapa. Nao pode ser aria-hidden:
@@ -233,9 +304,7 @@ export function FormularioCursoVip() {
             data-foco-programatico=""
             className="font-display text-[1.45rem] leading-snug font-medium text-ink outline-none sm:text-[1.7rem]"
           >
-            {etapaContato
-              ? "Para onde enviamos as informações?"
-              : atual!.pergunta}
+            {etapaContato ? "Para onde enviamos as informações?" : atual!.pergunta}
           </h2>
 
           {etapaContato && (
@@ -372,7 +441,8 @@ export function FormularioCursoVip() {
             <button
               type="button"
               onClick={voltar}
-              className="inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-full px-5 text-[0.95rem] font-medium text-ink-soft transition-colors duration-200 hover:text-wine"
+              disabled={enviando}
+              className="inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-full px-5 text-[0.95rem] font-medium text-ink-soft transition-colors duration-200 hover:text-wine disabled:opacity-50"
             >
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-4 w-4">
                 <path d="M12 4.5 6.5 10l5.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -386,11 +456,7 @@ export function FormularioCursoVip() {
             disabled={enviando}
             className="group inline-flex min-h-[3.5rem] flex-1 items-center justify-center gap-2.5 rounded-full bg-wine px-7 text-[1rem] font-medium text-white shadow-[0_14px_30px_-16px_rgba(139,38,61,0.7)] transition-colors duration-200 hover:bg-wine-deep disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {etapaContato
-              ? enviando
-                ? "Abrindo o WhatsApp…"
-                : "Continuar pelo WhatsApp"
-              : "Continuar"}
+            {etapaContato ? (enviando ? "Enviando…" : "Concluir cadastro") : "Continuar"}
             {!enviando && (
               <svg
                 viewBox="0 0 20 20"
