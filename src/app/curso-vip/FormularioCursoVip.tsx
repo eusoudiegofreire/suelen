@@ -5,7 +5,8 @@ import { siteConfig, whatsappUrl } from "@/config/site";
 import { etapasCursoVip, TOTAL_ETAPAS } from "@/data/curso-vip";
 
 /**
- * Formulario de qualificacao em tres etapas, uma pergunta por tela.
+ * Formulario de qualificacao do Curso VIP: tres perguntas, uma por tela, e
+ * uma tela final de contato.
  *
  * Decisoes que importam:
  * - Alternativas sao <input type="radio"> reais dentro de <fieldset>/<legend>,
@@ -16,21 +17,40 @@ import { etapasCursoVip, TOTAL_ETAPAS } from "@/data/curso-vip";
  *   escolhido.
  * - Nenhuma alternativa bloqueia o envio. O formulario coleta informacao;
  *   quem avalia compatibilidade e a equipe, depois.
+ * - No envio o WhatsApp abre PRIMEIRO, ainda dentro do gesto do clique, para
+ *   o navegador nao tratar como pop-up bloqueado. O envio ao CRM vai em
+ *   seguida e nunca trava a pessoa: se falhar, a conversa do WhatsApp ja leva
+ *   todas as respostas, entao o lead nao se perde.
  */
+
+const TOTAL_PERGUNTAS = etapasCursoVip.length;
+
+/** (69) 99999-9999 — formata enquanto digita, sem impedir apagar. */
+function formatarTelefone(valor: string) {
+  const d = valor.replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 2) return d;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
 export function FormularioCursoVip() {
   const [etapa, setEtapa] = useState(0);
-  const [respostas, setRespostas] = useState<(string | null)[]>(
-    () => Array(TOTAL_ETAPAS).fill(null)
+  const [respostas, setRespostas] = useState<(string | null)[]>(() =>
+    Array(TOTAL_PERGUNTAS).fill(null)
   );
-  const [erro, setErro] = useState(false);
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [erro, setErro] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
 
   const tituloRef = useRef<HTMLHeadingElement>(null);
   const raizRef = useRef<HTMLDivElement>(null);
   const primeiraRenderizacao = useRef(true);
 
-  const atual = etapasCursoVip[etapa];
-  const resposta = respostas[etapa];
-  const ultima = etapa === TOTAL_ETAPAS - 1;
+  const etapaContato = etapa === TOTAL_PERGUNTAS;
+  const atual = etapaContato ? null : etapasCursoVip[etapa];
+  const resposta = etapaContato ? null : respostas[etapa];
 
   // Ao trocar de etapa: traz o formulario para o topo da tela e leva o foco
   // para o titulo novo.
@@ -52,21 +72,31 @@ export function FormularioCursoVip() {
     tituloRef.current?.focus({ preventScroll: true });
   }, [etapa]);
 
-  function escolher(valor: string) {
+  function escolher(codigo: string) {
     setRespostas((anteriores) => {
       const copia = [...anteriores];
-      copia[etapa] = valor;
+      copia[etapa] = codigo;
       return copia;
     });
-    setErro(false);
+    setErro(null);
+  }
+
+  /** Alternativa escolhida em cada pergunta, ja resolvida para rotulo + codigo. */
+  function respostasResolvidas() {
+    return etapasCursoVip.map((e, i) => {
+      const alt = e.alternativas.find((a) => a.codigo === respostas[i]);
+      return { id: e.id, rotulo: e.rotulo, valor: alt?.rotulo ?? "", codigo: alt?.codigo ?? "" };
+    });
   }
 
   function montarMensagem() {
-    const linhas = etapasCursoVip.map(
-      (e, i) => `${i + 1}. ${e.rotulo}: ${respostas[i]}`
+    const linhas = respostasResolvidas().map(
+      (r, i) => `${i + 1}. ${r.rotulo}: ${r.valor}`
     );
     return [
       `Olá! Quero participar do Curso VIP da ${siteConfig.professional.name}.`,
+      "",
+      `Meu nome é ${nome.trim()}.`,
       "",
       "Minhas respostas:",
       "",
@@ -76,26 +106,74 @@ export function FormularioCursoVip() {
     ].join("\n");
   }
 
-  function avancar() {
-    if (!resposta) {
-      setErro(true);
-      return;
+  /** Envia para o n8n (que cria o lead no Kommo). Falha nunca bloqueia a pessoa. */
+  async function enviarParaCrm() {
+    const r = respostasResolvidas();
+    try {
+      const resposta = await fetch("/api/curso-vip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          nome: nome.trim(),
+          whatsapp: telefone.replace(/\D/g, ""),
+          profissao: r[0].valor,
+          habilitacao: r[1].valor,
+          momento: r[2].valor,
+          profissao_codigo: r[0].codigo,
+          habilitacao_codigo: r[1].codigo,
+          momento_codigo: r[2].codigo,
+        }),
+      });
+      if (!resposta.ok) {
+        console.warn("[curso-vip] lead nao registrado no CRM:", resposta.status);
+      }
+    } catch (e) {
+      console.warn("[curso-vip] falha ao registrar o lead no CRM:", e);
     }
-    if (!ultima) {
+  }
+
+  function avancar() {
+    // --- telas de pergunta ---
+    if (!etapaContato) {
+      if (!resposta) {
+        setErro("Selecione uma opção para continuar.");
+        return;
+      }
+      setErro(null);
       setEtapa(etapa + 1);
       return;
     }
-    // whatsappUrl ja aplica encodeURIComponent na mensagem
+
+    // --- tela de contato ---
+    if (nome.trim().length < 2) {
+      setErro("Informe seu nome para continuar.");
+      return;
+    }
+    const digitos = telefone.replace(/\D/g, "");
+    if (digitos.length < 10 || digitos.length > 11) {
+      setErro("Informe um WhatsApp válido, com DDD.");
+      return;
+    }
+
+    setErro(null);
+    setEnviando(true);
+
+    // Abre o WhatsApp dentro do gesto do clique: depois de um await o
+    // navegador trataria como pop-up e bloquearia.
     window.open(whatsappUrl(montarMensagem()), "_blank", "noopener,noreferrer");
+
+    void enviarParaCrm().finally(() => setEnviando(false));
   }
 
   function voltar() {
-    setErro(false);
+    setErro(null);
     setEtapa((e) => Math.max(0, e - 1));
   }
 
   const progresso = ((etapa + 1) / TOTAL_ETAPAS) * 100;
   const idErro = "curso-vip-erro";
+  const chave = etapaContato ? "contato" : atual!.id;
 
   return (
     <div ref={raizRef} className="w-full scroll-mt-6">
@@ -106,12 +184,12 @@ export function FormularioCursoVip() {
         <p className="text-[0.78rem] font-medium tracking-[0.16em] text-ink-soft uppercase">
           Etapa {etapa + 1} de {TOTAL_ETAPAS}
         </p>
-        <p
-          aria-hidden="true"
-          className="font-display text-[0.95rem] text-gold-deep"
-        >
+        <p aria-hidden="true" className="font-display text-[0.95rem] text-gold-deep">
           {String(etapa + 1).padStart(2, "0")}
-          <span className="text-ink-soft/50"> / {String(TOTAL_ETAPAS).padStart(2, "0")}</span>
+          <span className="text-ink-soft/50">
+            {" "}
+            / {String(TOTAL_ETAPAS).padStart(2, "0")}
+          </span>
         </p>
       </div>
 
@@ -140,10 +218,12 @@ export function FormularioCursoVip() {
         }}
       >
         {/* key força a animação de entrada a cada troca de etapa */}
-        <fieldset key={atual.id} className="etapa-entra mt-8 border-0 p-0">
-          {/* Nomeia o grupo de radios. Fica so para leitor de tela porque a
-              mesma pergunta aparece visivelmente no h2 logo abaixo. */}
-          <legend className="sr-only">{atual.pergunta}</legend>
+        <fieldset key={chave} className="etapa-entra mt-8 border-0 p-0">
+          <legend className="sr-only">
+            {etapaContato
+              ? "Seus dados de contato"
+              : atual!.pergunta}
+          </legend>
 
           {/* Recebe o foco a cada troca de etapa. Nao pode ser aria-hidden:
               mandar foco para conteudo escondido quebra o leitor de tela. */}
@@ -153,57 +233,121 @@ export function FormularioCursoVip() {
             data-foco-programatico=""
             className="font-display text-[1.45rem] leading-snug font-medium text-ink outline-none sm:text-[1.7rem]"
           >
-            {atual.pergunta}
+            {etapaContato
+              ? "Para onde enviamos as informações?"
+              : atual!.pergunta}
           </h2>
 
-          <div
-            className="mt-6 space-y-2.5"
-            aria-describedby={erro ? idErro : undefined}
-          >
-            {atual.alternativas.map((alternativa) => {
-              const selecionada = resposta === alternativa;
-              return (
-                <label
-                  key={alternativa}
-                  className={`group flex min-h-[3.5rem] cursor-pointer items-center gap-4 rounded-[10px] border px-4 py-3.5 transition-colors duration-200 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-wine ${
-                    selecionada
-                      ? "border-wine bg-rose-soft"
-                      : "border-line bg-shell hover:border-wine/45 hover:bg-rose-soft/45"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name={atual.id}
-                    value={alternativa}
-                    checked={selecionada}
-                    onChange={() => escolher(alternativa)}
-                    className="sr-only"
-                  />
+          {etapaContato && (
+            <p className="mt-2.5 text-[0.95rem] leading-relaxed text-ink-soft">
+              A equipe usa esses dados para continuar a conversa pelo WhatsApp.
+            </p>
+          )}
 
-                  {/* Indicador redondo. aria-hidden porque o proprio radio ja
-                      comunica o estado para a tecnologia assistiva. */}
-                  <span
-                    aria-hidden="true"
-                    className={`flex h-[1.15rem] w-[1.15rem] shrink-0 items-center justify-center rounded-full border transition-colors duration-200 ${
+          {/* ---------- perguntas ---------- */}
+          {!etapaContato && (
+            <div
+              className="mt-6 space-y-2.5"
+              aria-describedby={erro ? idErro : undefined}
+            >
+              {atual!.alternativas.map((alternativa) => {
+                const selecionada = resposta === alternativa.codigo;
+                return (
+                  <label
+                    key={alternativa.codigo}
+                    className={`group flex min-h-[3.5rem] cursor-pointer items-center gap-4 rounded-[10px] border px-4 py-3.5 transition-colors duration-200 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-wine ${
                       selecionada
-                        ? "border-wine"
-                        : "border-ink/30 group-hover:border-wine/50"
+                        ? "border-wine bg-rose-soft"
+                        : "border-line bg-shell hover:border-wine/45 hover:bg-rose-soft/45"
                     }`}
                   >
-                    <span
-                      className={`h-[0.6rem] w-[0.6rem] rounded-full bg-wine transition-transform duration-200 ${
-                        selecionada ? "scale-100" : "scale-0"
-                      }`}
+                    <input
+                      type="radio"
+                      name={atual!.id}
+                      value={alternativa.codigo}
+                      checked={selecionada}
+                      onChange={() => escolher(alternativa.codigo)}
+                      className="sr-only"
                     />
-                  </span>
 
-                  <span className="text-[0.98rem] leading-snug text-ink">
-                    {alternativa}
-                  </span>
+                    {/* Indicador redondo. aria-hidden porque o proprio radio ja
+                        comunica o estado para a tecnologia assistiva. */}
+                    <span
+                      aria-hidden="true"
+                      className={`flex h-[1.15rem] w-[1.15rem] shrink-0 items-center justify-center rounded-full border transition-colors duration-200 ${
+                        selecionada
+                          ? "border-wine"
+                          : "border-ink/30 group-hover:border-wine/50"
+                      }`}
+                    >
+                      <span
+                        className={`h-[0.6rem] w-[0.6rem] rounded-full bg-wine transition-transform duration-200 ${
+                          selecionada ? "scale-100" : "scale-0"
+                        }`}
+                      />
+                    </span>
+
+                    <span className="text-[0.98rem] leading-snug text-ink">
+                      {alternativa.rotulo}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ---------- contato ---------- */}
+          {etapaContato && (
+            <div
+              className="mt-6 space-y-4"
+              aria-describedby={erro ? idErro : undefined}
+            >
+              <div>
+                <label
+                  htmlFor="curso-vip-nome"
+                  className="block text-[0.88rem] font-medium text-ink"
+                >
+                  Nome completo
                 </label>
-              );
-            })}
-          </div>
+                <input
+                  id="curso-vip-nome"
+                  name="nome"
+                  type="text"
+                  autoComplete="name"
+                  value={nome}
+                  onChange={(e) => {
+                    setNome(e.target.value);
+                    setErro(null);
+                  }}
+                  placeholder="Como podemos te chamar"
+                  className="mt-2 block min-h-[3.25rem] w-full rounded-[10px] border border-line bg-shell px-4 text-[1rem] text-ink transition-colors placeholder:text-ink-soft/55 hover:border-wine/45 focus:border-wine focus:outline-2 focus:outline-offset-2 focus:outline-wine"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="curso-vip-whatsapp"
+                  className="block text-[0.88rem] font-medium text-ink"
+                >
+                  WhatsApp com DDD
+                </label>
+                <input
+                  id="curso-vip-whatsapp"
+                  name="whatsapp"
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  value={telefone}
+                  onChange={(e) => {
+                    setTelefone(formatarTelefone(e.target.value));
+                    setErro(null);
+                  }}
+                  placeholder="(69) 99999-9999"
+                  className="mt-2 block min-h-[3.25rem] w-full rounded-[10px] border border-line bg-shell px-4 text-[1rem] text-ink transition-colors placeholder:text-ink-soft/55 hover:border-wine/45 focus:border-wine focus:outline-2 focus:outline-offset-2 focus:outline-wine"
+                />
+              </div>
+            </div>
+          )}
 
           {erro && (
             <p
@@ -215,7 +359,7 @@ export function FormularioCursoVip() {
                 <circle cx="8" cy="8" r="6.6" stroke="currentColor" strokeWidth="1.4" />
                 <path d="M8 4.8v4M8 11.1h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
-              Selecione uma opção para continuar.
+              {erro}
             </p>
           )}
         </fieldset>
@@ -239,17 +383,24 @@ export function FormularioCursoVip() {
 
           <button
             type="submit"
-            className="group inline-flex min-h-[3.5rem] flex-1 items-center justify-center gap-2.5 rounded-full bg-wine px-7 text-[1rem] font-medium text-white shadow-[0_14px_30px_-16px_rgba(139,38,61,0.7)] transition-colors duration-200 hover:bg-wine-deep"
+            disabled={enviando}
+            className="group inline-flex min-h-[3.5rem] flex-1 items-center justify-center gap-2.5 rounded-full bg-wine px-7 text-[1rem] font-medium text-white shadow-[0_14px_30px_-16px_rgba(139,38,61,0.7)] transition-colors duration-200 hover:bg-wine-deep disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {ultima ? "Continuar pelo WhatsApp" : "Continuar"}
-            <svg
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-              className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
-            >
-              <path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            {etapaContato
+              ? enviando
+                ? "Abrindo o WhatsApp…"
+                : "Continuar pelo WhatsApp"
+              : "Continuar"}
+            {!enviando && (
+              <svg
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+                className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+              >
+                <path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
           </button>
         </div>
       </form>

@@ -1,0 +1,122 @@
+{
+  "name": "Curso VIP → Kommo",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Setup\n\n1. **Webhook**: copie a URL de **produção** deste node.\n2. Na **Vercel** do site, crie a variável de ambiente `N8N_WEBHOOK_CURSO_VIP` com essa URL (Project → Settings → Environment Variables) e faça um novo deploy.\n   O site **não** chama o n8n direto: ele passa por `/api/curso-vip`, para a URL do webhook não ficar exposta no navegador.\n3. **Credencial**: reaproveite a mesma credencial Header Auth \"Kommo\" do fluxo do Lovable (Authorization = Bearer SEU_TOKEN).\n4. Ative o workflow.\n\n### O que o site envia\n```\nnome, whatsapp (só dígitos), source, created_at,\nprofissao, habilitacao, momento              (texto que a pessoa leu)\nprofissao_codigo, habilitacao_codigo, momento_codigo   (slug curto, vira tag)\n```\n\n### Tags criadas no lead\n`origem-curso-vip`, `curso-vip-profissao-<codigo>`, `curso-vip-habilitacao-<codigo>`, `curso-vip-momento-<codigo>`\n\nAs respostas por extenso vão na **nota** do lead, para a equipe ler sem depender das tags.",
+        "height": 560,
+        "width": 640,
+        "color": 4
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000001",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, -300]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "curso-vip-kommo",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000002",
+      "name": "Webhook - Curso VIP",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [240, 304],
+      "webhookId": "a1b2c3d4-0000-4000-8000-00000000000a"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const body = $input.item.json.body ?? $input.item.json;\n\nconst nome = (body.nome ?? body.name ?? '').toString().trim();\nconst whatsapp = (body.whatsapp ?? body.telefone ?? body.phone ?? '').toString().replace(/\\D/g, '');\nconst source = body.source ?? 'curso-vip';\nconst createdAt = body.created_at ?? new Date().toISOString();\n\n// Texto que a pessoa leu na tela\nconst profissao = body.profissao ?? '';\nconst habilitacao = body.habilitacao ?? '';\nconst momento = body.momento ?? '';\n\n// Slug curto de cada resposta, usado nas tags\nconst profissaoCod = body.profissao_codigo ?? '';\nconst habilitacaoCod = body.habilitacao_codigo ?? '';\nconst momentoCod = body.momento_codigo ?? '';\n\nconst tags = [{ name: 'origem-' + source }];\nif (profissaoCod) tags.push({ name: 'curso-vip-profissao-' + profissaoCod });\nif (habilitacaoCod) tags.push({ name: 'curso-vip-habilitacao-' + habilitacaoCod });\nif (momentoCod) tags.push({ name: 'curso-vip-momento-' + momentoCod });\n\nconst customFieldsValues = [];\nif (whatsapp) {\n  customFieldsValues.push({\n    field_code: 'PHONE',\n    values: [{ value: whatsapp, enum_code: 'WORK' }],\n  });\n}\n\n// As respostas por extenso ficam na nota do lead: a equipe le direto no card,\n// sem precisar decifrar as tags.\nconst nota = [\n  'Curso VIP - respostas do formulario',\n  '',\n  '1. Profissao: ' + profissao,\n  '2. Habilitacao profissional: ' + habilitacao,\n  '3. Momento profissional: ' + momento,\n  '',\n  'WhatsApp: ' + whatsapp,\n  'Enviado em: ' + createdAt,\n].join('\\n');\n\nconst payload = [\n  {\n    name: (nome ? nome + ' - Curso VIP' : 'Novo lead - Curso VIP'),\n    _embedded: {\n      tags,\n      contacts: [\n        {\n          first_name: nome,\n          custom_fields_values: customFieldsValues,\n        },\n      ],\n    },\n  },\n];\n\nreturn { json: { payload, nota, nome, whatsapp, profissao, habilitacao, momento, source, createdAt } };"
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000003",
+      "name": "Montar Payload Kommo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [544, 304]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://paranhosuelen.kommo.com/api/v4/leads/complex",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.payload }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000004",
+      "name": "Criar Lead no Kommo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [848, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "s9FQQaLtPyOm2iGX",
+          "name": "Kommo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://paranhosuelen.kommo.com/api/v4/leads/notes",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ [ { \"entity_id\": $json[0].id, \"note_type\": \"common\", \"params\": { \"text\": $('Montar Payload Kommo').item.json.nota } } ] }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000005",
+      "name": "Anexar Respostas como Nota",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [1152, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "s9FQQaLtPyOm2iGX",
+          "name": "Kommo"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Lead do Curso VIP recebido\" } }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0000-4000-8000-000000000006",
+      "name": "Responder Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [1456, 304]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Curso VIP": {
+      "main": [[{ "node": "Montar Payload Kommo", "type": "main", "index": 0 }]]
+    },
+    "Montar Payload Kommo": {
+      "main": [[{ "node": "Criar Lead no Kommo", "type": "main", "index": 0 }]]
+    },
+    "Criar Lead no Kommo": {
+      "main": [[{ "node": "Anexar Respostas como Nota", "type": "main", "index": 0 }]]
+    },
+    "Anexar Respostas como Nota": {
+      "main": [[{ "node": "Responder Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
