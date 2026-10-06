@@ -70,7 +70,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ [ { \"entity_id\": $json[0].id, \"note_type\": \"common\", \"params\": { \"text\": $('Montar Payload Kommo').item.json.nota } } ] }}",
+        "jsonBody": "={{ [ { \"entity_id\": $json.id ?? $json[0]?.id, \"note_type\": \"common\", \"params\": { \"text\": $('Montar Payload Kommo').item.json.nota } } ] }}",
         "options": {}
       },
       "id": "a1b2c3d4-0000-4000-8000-000000000005",

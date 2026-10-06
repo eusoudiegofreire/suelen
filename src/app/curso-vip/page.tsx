@@ -3,6 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { garantiasCursoVip } from "@/data/curso-vip";
 import { Marca } from "@/components/ui/Marca";
+import { MetaPixel } from "@/components/MetaPixel";
 import { FormularioCursoVip } from "./FormularioCursoVip";
 
 const TITULO = `Curso VIP | ${siteConfig.name}`;
@@ -26,6 +27,9 @@ export const metadata: Metadata = {
 export default function CursoVipPage() {
   return (
     <div className="flex min-h-dvh flex-col bg-ivory lg:flex-row">
+      {/* Rastreamento so nesta pagina: e ela que recebe trafego de anuncio */}
+      <MetaPixel />
+
       {/* ==================================================================
           Apresentacao — 42% no desktop, bloco compacto no celular
           ================================================================== */}

@@ -69,6 +69,14 @@ export const siteConfig = {
   },
 
   // --------------------------------------------------------------------
+  // RASTREAMENTO
+  // --------------------------------------------------------------------
+  // Pixel da Meta. Hoje so e carregado na pagina /curso-vip, que e a que
+  // recebe trafego de anuncio — o site principal segue sem rastreamento.
+  // Deixe vazio para desligar o pixel sem mexer em codigo.
+  META_PIXEL_ID: "1120510257094422",
+
+  // --------------------------------------------------------------------
   // SEO
   // --------------------------------------------------------------------
   // TODO: trocar pelo dominio definitivo quando ele for contratado.

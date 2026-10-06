@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { siteConfig, whatsappUrl } from "@/config/site";
 import { etapasCursoVip, TOTAL_ETAPAS } from "@/data/curso-vip";
+import { rastrearEvento } from "@/components/MetaPixel";
 
 /**
  * Formulario de qualificacao do Curso VIP: tres perguntas, uma por tela, uma
@@ -171,6 +172,11 @@ export function FormularioCursoVip() {
     setErro(null);
     setEnviando(true);
     await enviarParaCrm();
+
+    // Conversao para a Meta. Dispara aqui, no cadastro concluido — nao no
+    // clique do WhatsApp, que e opcional e aconteceria depois.
+    rastrearEvento("Lead", { content_name: "Curso VIP" });
+
     setEnviando(false);
     setConcluido(true);
   }
