@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { fotos } from "@/data/images";
 import { beneficiosFullFace } from "@/data/content";
 import { Eyebrow, Section, WhatsappCta } from "./ui/Primitives";
@@ -68,13 +69,19 @@ export function FullFace() {
               completo para definir o que realmente faz sentido para você.
             </blockquote>
 
-            <div className="mt-9">
+            <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
               <WhatsappCta
                 variant="onDark"
                 message="Olá! Conheci o site da Dra. Suelen Paranho e gostaria de agendar uma avaliação Full Face."
               >
                 Agendar avaliação Full Face
               </WhatsappCta>
+              <Link
+                href="/full-face"
+                className="inline-flex min-h-11 items-center text-[0.95rem] font-medium text-ivory/85 underline decoration-gold-light/50 underline-offset-4 transition-colors hover:text-ivory hover:decoration-gold-light"
+              >
+                Saiba tudo sobre o Full Face
+              </Link>
             </div>
           </Reveal>
         </div>

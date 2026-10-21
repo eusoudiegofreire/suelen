@@ -14,7 +14,14 @@ import { WhatsappGlyph } from "./ui/Primitives";
  * Quando a ampliacao de imagem esta aberta, o <dialog> nativo sobe para a top
  * layer e fica naturalmente acima deste botao.
  */
-export function FloatingCta() {
+export function FloatingCta({
+  message,
+  label = "Agendar avaliação",
+}: {
+  /** Mensagem propria do botao. Quando omitida, usa a do site. */
+  message?: string;
+  label?: string;
+} = {}) {
   const [visivel, setVisivel] = useState(false);
 
   useEffect(() => {
@@ -79,7 +86,7 @@ export function FloatingCta() {
       }`}
     >
       <a
-        href={whatsappUrl()}
+        href={whatsappUrl(message)}
         target="_blank"
         rel="noopener noreferrer"
         tabIndex={visivel ? undefined : -1}
@@ -87,7 +94,7 @@ export function FloatingCta() {
         className="flex min-h-14 items-center justify-center gap-2.5 rounded-[3px] bg-wine px-6 text-[0.98rem] font-medium text-white shadow-[0_6px_24px_-6px_rgba(42,37,34,0.45)]"
       >
         <WhatsappGlyph className="h-5 w-5" />
-        Agendar avaliação
+        {label}
       </a>
     </div>
   );
