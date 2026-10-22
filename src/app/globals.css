@@ -168,6 +168,114 @@ p {
 }
 
 /* ==========================================================================
+   EFEITOS DA PAGINA FULL FACE (src/components/efeitos/)
+   Adaptados do ThreeUI (MIT, (c) 2026 Meng To). Ver THIRD_PARTY_NOTICES.md.
+   ========================================================================== */
+
+/* Inclinacao — plano que gira em 3D e reflexo de luz que segue o mouse */
+.inclinacao-plano {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --luz-x: 50%;
+  --luz-y: 30%;
+  --luz: 0;
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.inclinacao-luz {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: calc(var(--luz) * 0.9);
+  background: radial-gradient(
+    circle at var(--luz-x) var(--luz-y),
+    rgba(255, 248, 232, 0.32),
+    rgba(216, 176, 90, 0.08) 38%,
+    transparent 62%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity 400ms var(--ease-soft);
+}
+
+/* Trilho de resultados — papel bege com grade fina e uma luz que acompanha
+   o mouse, no lugar do bege mais amarelado do original */
+.filmstrip-palco {
+  --luz-x: 50%;
+  perspective: 1450px;
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  background:
+    linear-gradient(90deg, rgba(138, 106, 34, 0.09) 1px, transparent 1px) 50% 0 / 25% 100%,
+    repeating-linear-gradient(0deg, transparent 0 109px, rgba(138, 106, 34, 0.1) 110px, transparent 111px),
+    radial-gradient(circle at var(--luz-x) 48%, rgba(255, 252, 246, 0.9), transparent 38%),
+    var(--color-sand);
+}
+/* Granulado de papel */
+.filmstrip-palco::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    repeating-radial-gradient(circle at 12% 18%, rgba(71, 51, 30, 0.17) 0 0.5px, transparent 0.7px 4px),
+    repeating-radial-gradient(circle at 78% 71%, rgba(255, 255, 255, 0.35) 0 0.5px, transparent 0.8px 5px);
+  mix-blend-mode: multiply;
+}
+/* Bordas escurecem levemente, para o centro ganhar profundidade */
+.filmstrip-palco::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(98, 78, 52, 0.16),
+    transparent 16%,
+    transparent 84%,
+    rgba(98, 78, 52, 0.16)
+  );
+}
+.filmstrip-cartao {
+  --foco: 0;
+  padding: 7px;
+  border: 1px solid rgba(39, 35, 33, 0.22);
+  border-radius: 3px;
+  background: var(--color-shell);
+  box-shadow:
+    0 calc(10px + var(--foco) * 24px) calc(18px + var(--foco) * 36px)
+      rgba(57, 42, 30, calc(0.16 + var(--foco) * 0.24)),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+.filmstrip-cartao:focus-visible {
+  outline: 2px solid var(--color-wine);
+  outline-offset: 3px;
+}
+.filmstrip-foto {
+  transform: scale(calc(1.02 + (1 - var(--foco)) * 0.05));
+  filter: sepia(calc((1 - var(--foco)) * 0.22)) saturate(calc(0.7 + var(--foco) * 0.3));
+}
+
+/* Texto em volta do selo guilhoche */
+@keyframes selo-gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.selo-texto {
+  animation: selo-gira 60s linear infinite;
+}
+
+/* ==========================================================================
    MOVIMENTO
    Entrada suave revelada no scroll. O estado final e aplicado via
    [data-revealed="true"] pelo componente Reveal.

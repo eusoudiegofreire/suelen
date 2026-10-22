@@ -1,48 +1,32 @@
 "use client";
 
 import Image from "next/image";
-import type { FotoOtimizada } from "@/data/images";
-import { AVISO_RESULTADOS, resultados as resultadosSite } from "@/data/content";
+import { AVISO_RESULTADOS, resultados } from "@/data/content";
 import { Eyebrow, Section } from "./ui/Primitives";
 import { Lightbox, useLightbox } from "./ui/Lightbox";
 import { Reveal } from "./ui/Reveal";
 
-type ItemResultado = { foto: FotoOtimizada; alt: string };
-
-/** Sem props, mostra a galeria completa do site principal. */
-export function Resultados({
-  itens,
-  titulo = "Planejamento individual, resultados únicos",
-  texto = "Conheça alguns resultados reais e autorizados de pacientes atendidos pela Dra. Suelen Paranho.",
-  tone = "ivory",
-}: {
-  itens?: readonly ItemResultado[];
-  titulo?: string;
-  texto?: string;
-  tone?: "ivory" | "sand";
-} = {}) {
-  const resultados = itens ?? resultadosSite;
+export function Resultados() {
   const { indice, abrir, fechar, mover } = useLightbox(resultados.length);
 
   return (
-    <Section id="resultados" tone={tone} labelledBy="resultados-titulo">
+    <Section id="resultados" tone="ivory" labelledBy="resultados-titulo">
       <Reveal className="max-w-2xl">
         <Eyebrow>Resultados</Eyebrow>
         <h2
           id="resultados-titulo"
           className="mt-6 text-[1.75rem] sm:text-4xl lg:text-[2.6rem]"
         >
-          {titulo}
+          Planejamento individual, resultados únicos
         </h2>
-        <p className="mt-5 text-ink-soft">{texto}</p>
+        <p className="mt-5 text-ink-soft">
+          Conheça alguns resultados reais e autorizados de pacientes atendidos
+          pela Dra. Suelen Paranho.
+        </p>
       </Reveal>
 
       {/* Todas as imagens ficam visiveis; ampliar e um extra, nao um requisito */}
-      <ul
-        className={`mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 ${
-          resultados.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4"
-        }`}
-      >
+      <ul className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
         {resultados.map((item, i) => (
           <Reveal as="li" key={item.foto.src} delay={Math.min(i * 45, 200)}>
             <button

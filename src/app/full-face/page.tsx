@@ -21,7 +21,10 @@ import {
 import { Marca } from "@/components/ui/Marca";
 import { Eyebrow, Section, WhatsappCta, WhatsappGlyph } from "@/components/ui/Primitives";
 import { Reveal } from "@/components/ui/Reveal";
-import { Resultados } from "@/components/Resultados";
+import { FiosDourados } from "@/components/efeitos/FiosDourados";
+import { GaleriaFilmstrip } from "@/components/efeitos/GaleriaFilmstrip";
+import { Inclinacao } from "@/components/efeitos/Inclinacao";
+import { SeloGuilloche } from "@/components/efeitos/SeloGuilloche";
 import { Depoimentos } from "@/components/Depoimentos";
 import { FloatingCta } from "@/components/FloatingCta";
 import { MetaPixel } from "@/components/MetaPixel";
@@ -81,11 +84,7 @@ export default function FullFacePage() {
         <OQueE />
         <OQueAvaliamos />
         <Procedimentos />
-        <Resultados
-          itens={resultadosFullFace}
-          titulo="Planejamentos Full Face realizados pela Dra. Suelen"
-          texto="Registros reais e autorizados de pacientes que passaram pela avaliação e pelo planejamento Full Face."
-        />
+        <Resultados />
         <Depoimentos />
         <SobreDra />
         <ComoFunciona />
@@ -215,19 +214,24 @@ function Abertura() {
             aria-hidden="true"
             className="absolute -top-8 -right-6 -bottom-12 -left-10 rounded-[58%_42%_46%_54%/44%_56%_44%_56%] bg-rose/75 sm:-right-10 sm:-left-14"
           />
-          <div className="relative overflow-hidden rounded-[1.75rem] shadow-[0_42px_90px_-38px_rgba(39,35,33,0.45)]">
-            <Image
-              src={fotos.suelenFullFace.src}
-              width={fotos.suelenFullFace.width}
-              height={fotos.suelenFullFace.height}
-              blurDataURL={fotos.suelenFullFace.blurDataURL}
-              placeholder="blur"
-              preload
-              sizes="(min-width: 1024px) 480px, (min-width: 640px) 60vw, 92vw"
-              alt="Dra. Suelen Paranho em ambiente de estúdio, sentada, vestindo traje social."
-              className="aspect-[4/5] h-full w-full object-cover object-[50%_20%]"
-            />
-          </div>
+          <Inclinacao className="relative">
+            <div className="overflow-hidden rounded-[1.75rem] shadow-[0_42px_90px_-38px_rgba(39,35,33,0.45)]">
+              <Image
+                src={fotos.suelenFullFace.src}
+                width={fotos.suelenFullFace.width}
+                height={fotos.suelenFullFace.height}
+                blurDataURL={fotos.suelenFullFace.blurDataURL}
+                placeholder="blur"
+                preload
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 60vw, 92vw"
+                alt="Dra. Suelen Paranho em ambiente de estúdio, sentada, vestindo traje social."
+                className="aspect-[4/5] h-full w-full object-cover object-[50%_20%]"
+              />
+            </div>
+          </Inclinacao>
+
+          {/* Selo guilhoche no canto inferior da foto, longe do rosto e do texto */}
+          <SeloFullFace className="absolute -right-3 -bottom-10 w-[7.5rem] sm:-right-8 sm:w-36 lg:-right-10 lg:-bottom-12 lg:w-40" />
         </div>
       </div>
     </section>
@@ -284,7 +288,21 @@ function Identificacao() {
    ========================================================================== */
 function OQueE() {
   return (
-    <Section id="o-que-e" tone="ink" labelledBy="ff-oque-titulo">
+    <Section
+      id="o-que-e"
+      tone="ink"
+      labelledBy="ff-oque-titulo"
+      fundo={
+        <>
+          <FiosDourados />
+          {/* Veu: o lado do texto fica mais escuro para manter a leitura */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-ink/60 lg:bg-transparent lg:bg-[linear-gradient(90deg,rgba(39,35,33,0.94)_0%,rgba(39,35,33,0.86)_42%,rgba(39,35,33,0.55)_70%,rgba(39,35,33,0.35)_100%)]"
+          />
+        </>
+      }
+    >
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
         <Reveal>
           <Eyebrow tone="dark">O que é o Full Face</Eyebrow>
@@ -379,7 +397,12 @@ function OQueAvaliamos() {
   return (
     <Section tone="ivory" labelledBy="ff-avaliacao-titulo">
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-        <Reveal className="lg:sticky lg:top-32 lg:self-start">
+        <Reveal className="relative lg:sticky lg:top-32 lg:self-start">
+          <SeloGuilloche
+            comFundo={false}
+            opacidade={0.45}
+            className="pointer-events-none absolute -top-24 -left-36 -z-10 hidden w-[26rem] lg:block"
+          />
           <Eyebrow>Na avaliação</Eyebrow>
           <h2
             id="ff-avaliacao-titulo"
@@ -662,7 +685,20 @@ function Duvidas() {
    ========================================================================== */
 function Fechamento() {
   return (
-    <Section id="agendar" tone="ink" labelledBy="ff-cta-titulo">
+    <Section
+      id="agendar"
+      tone="ink"
+      labelledBy="ff-cta-titulo"
+      fundo={
+        <>
+          <FiosDourados densidade={0.8} />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(39,35,33,0.92)_0%,rgba(39,35,33,0.8)_45%,rgba(39,35,33,0.35)_100%)]"
+          />
+        </>
+      }
+    >
       <Reveal className="mx-auto max-w-3xl text-center">
         <Image
           src="/marca/logo-simbolo-branco.png"
@@ -729,6 +765,68 @@ function Rodape() {
         </p>
       </div>
     </footer>
+  );
+}
+
+/* ==========================================================================
+   Resultados — trilho 3D so com os registros de Full Face
+   ========================================================================== */
+function Resultados() {
+  return (
+    <Section id="resultados" tone="ivory" labelledBy="ff-resultados-titulo">
+      <Reveal className="max-w-2xl">
+        <Eyebrow>Resultados</Eyebrow>
+        <h2
+          id="ff-resultados-titulo"
+          className="mt-6 text-[1.75rem] sm:text-4xl lg:text-[2.6rem]"
+        >
+          Planejamentos Full Face realizados pela Dra. Suelen
+        </h2>
+        <p className="mt-5 text-ink-soft">
+          Registros reais e autorizados de pacientes que passaram pela
+          avaliação e pelo planejamento Full Face.
+        </p>
+      </Reveal>
+
+      <Reveal delay={90} className="mt-12">
+        <GaleriaFilmstrip itens={resultadosFullFace} />
+      </Reveal>
+
+      <p className="mt-8 max-w-2xl border-l-2 border-line pl-5 text-[0.85rem] leading-relaxed text-ink-muted">
+        {AVISO_RESULTADOS}
+      </p>
+    </Section>
+  );
+}
+
+/* ==========================================================================
+   Selo — roseta guilhoche com o nome do planejamento correndo em volta
+   ========================================================================== */
+function SeloFullFace({ className = "" }: { className?: string }) {
+  return (
+    <div className={`z-10 drop-shadow-[0_14px_24px_rgba(39,35,33,0.22)] ${className}`}>
+      <div className="relative aspect-square rounded-full bg-ivory">
+        {/* Roseta no miolo; o anel de fora fica para o texto */}
+        <SeloGuilloche className="absolute inset-[17%]" />
+        <svg viewBox="0 0 200 200" aria-hidden="true" className="absolute inset-0 h-full w-full">
+          <circle cx="100" cy="100" r="96" fill="none" stroke="var(--color-gold)" strokeWidth="0.8" />
+          <circle cx="100" cy="100" r="93" fill="none" stroke="var(--color-gold)" strokeWidth="0.4" />
+          <circle cx="100" cy="100" r="70" fill="none" stroke="var(--color-gold)" strokeWidth="0.5" opacity="0.7" />
+        </svg>
+        {/* O anel de texto gira devagar; com "reduzir movimento" fica parado */}
+        <svg viewBox="0 0 200 200" aria-hidden="true" className="selo-texto absolute inset-0 h-full w-full">
+          <defs>
+            <path id="selo-circulo" d="M100,100 m-79,0 a79,79 0 1,1 158,0 a79,79 0 1,1 -158,0" />
+          </defs>
+          <text
+            className="fill-gold-deep"
+            style={{ fontSize: "10.5px", letterSpacing: "0.3em", fontWeight: 500 }}
+          >
+            <textPath href="#selo-circulo">PLANEJAMENTO FULL FACE · DRA. SUELEN PARANHO ·</textPath>
+          </text>
+        </svg>
+      </div>
+    </div>
   );
 }
 

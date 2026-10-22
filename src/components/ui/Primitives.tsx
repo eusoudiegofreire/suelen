@@ -104,12 +104,15 @@ export function Section({
   tone = "ivory",
   className = "",
   labelledBy,
+  fundo,
 }: {
   id?: string;
   children: ReactNode;
   tone?: "ivory" | "sand" | "ink" | "shell";
   className?: string;
   labelledBy?: string;
+  /** Camada decorativa atras do conteudo (ex.: efeito em canvas). */
+  fundo?: ReactNode;
 }) {
   const tones = {
     ivory: "bg-ivory text-ink",
@@ -122,9 +125,12 @@ export function Section({
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={`${tones[tone]} px-5 py-20 sm:px-8 md:py-28 lg:py-32 ${className}`}
+      className={`${tones[tone]} px-5 py-20 sm:px-8 md:py-28 lg:py-32 ${
+        fundo ? "relative isolate overflow-hidden" : ""
+      } ${className}`}
     >
-      <div className="mx-auto w-full max-w-6xl">{children}</div>
+      {fundo}
+      <div className={`mx-auto w-full max-w-6xl ${fundo ? "relative" : ""}`}>{children}</div>
     </section>
   );
 }
